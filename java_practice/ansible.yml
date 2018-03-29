@@ -1,0 +1,47 @@
+---
+- hosts: "{{ cd_env }}"
+  vars:
+    - jar_file: "{{ packer }}.jar"
+  tasks:
+
+    - name: check work path
+      stat: path=/app/{{packer}}
+      register: work_path
+
+    - name: create work path
+      file: path=/app/{{packer}} state=directory
+      when: work_path.stat.isdir is not defined
+
+    - name: check run path
+      stat: path=/app/{{packer}}/run
+      register: work_run_path
+
+    - name: create work run path
+      file: path=/app/{{packer}}/run state=directory
+      when: work_run_path.stat.isdir is not defined
+
+    - name: check logs path
+      stat: path=/app/{{packer}}/logs
+      register: work_logs_path
+
+    - name: create work logs path
+      file: path=/app/{{packer}}/logs state=directory
+      when: work_logs_path.stat.isdir is not defined
+
+    - name: copy packer
+      copy: src={{project}}/target/{{jar_file}} dest=/app/{{packer}}/{{jar_file}}
+
+    - name: copy service.sh
+      template: src=/opt/dtstack/ansible/super.sh.j2 dest=/app/{{packer}}/super.sh mode='0755'
+
+#    - name: yum install supervisor
+#      yum: name=supervisor state=latest
+
+    - name: copy supervisor.conf
+      template: src=/opt/dtstack/ansible/supervisor.conf.j2 dest=/app/{{packer}}/supervisor.conf mode='0755'
+
+    - name: stop service
+      shell: "bash /app/{{packer}}/super.sh stop"
+
+    - name: start service
+      shell: "bash /app/{{packer}}/super.sh start"
