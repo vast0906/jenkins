@@ -40,13 +40,13 @@
       copy: src={{project}}/dist dest=/home/admin/ops_screen
 
 #    - name: copy service.sh
-#      template: src=/opt/dtstack/ansible/super.sh.j2 dest=/app/{{packer}}/super.sh mode='0755'
+#      template: src=/opt/ansible/super.sh.j2 dest=/app/{{packer}}/super.sh mode='0755'
 #
 ##    - name: yum install supervisor
 ##      yum: name=supervisor state=latest
 #
 #    - name: copy supervisor.conf
-#      template: src=/opt/dtstack/ansible/supervisor.conf.j2 dest=/app/{{packer}}/supervisor.conf mode='0755'
+#      template: src=/opt/ansible/supervisor.conf.j2 dest=/app/{{packer}}/supervisor.conf mode='0755'
 #
 #    - name: stop service
 #      shell: "bash /app/{{packer}}/super.sh stop"
